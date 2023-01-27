@@ -2,7 +2,7 @@ class GildedRose
   AGED_BRIE = "Aged Brie".freeze
   BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert".freeze
   SULFURAS = "Sulfuras, Hand of Ragnaros".freeze
-  CONJURED = "Conjured Item".freeze
+  CONJURED = "Conjured Mana Cake".freeze
   LEGENDARY_ITEM_STATIC_QUALITY = 80.freeze
   LEGENDARY_ITEMS = [SULFURAS].freeze
   CONJURED_ITEMS = [CONJURED].freeze
