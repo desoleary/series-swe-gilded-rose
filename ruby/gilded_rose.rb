@@ -1,4 +1,11 @@
 class GildedRose
+  AGED_BRIE = "Aged Brie".freeze
+  BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert".freeze
+  SULFURAS = "Sulfuras, Hand of Ragnaros".freeze
+  CONJURED = "Conjured Item".freeze
+  LEGENDARY_ITEM_STATIC_QUALITY = 80.freeze
+  LEGENDARY_ITEMS = [SULFURAS].freeze
+  CONJURED_ITEMS = [CONJURED].freeze
 
   def initialize(items)
     @items = items
@@ -6,16 +13,22 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
+      original_item = item.dup
+      if LEGENDARY_ITEMS.include?(item.name)
+        item.quality = LEGENDARY_ITEM_STATIC_QUALITY
+        next # sell_in never changes so no need to recalculate
+      end
+
+      if item.name != AGED_BRIE and item.name != BACKSTAGE_PASSES
         if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
+          if item.name != SULFURAS
             item.quality = item.quality - 1
           end
         end
       else
         if item.quality < 50
           item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
+          if item.name == BACKSTAGE_PASSES
             if item.sell_in < 11
               if item.quality < 50
                 item.quality = item.quality + 1
@@ -29,14 +42,14 @@ class GildedRose
           end
         end
       end
-      if item.name != "Sulfuras, Hand of Ragnaros"
+      if item.name != SULFURAS
         item.sell_in = item.sell_in - 1
       end
       if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
+        if item.name != AGED_BRIE
+          if item.name != BACKSTAGE_PASSES
             if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
+              if item.name != SULFURAS
                 item.quality = item.quality - 1
               end
             end
@@ -48,6 +61,11 @@ class GildedRose
             item.quality = item.quality + 1
           end
         end
+      end
+
+      if CONJURED_ITEMS.include?(item.name)
+        quality_delta = [original_item.quality - item.quality, 0].max
+        item.quality = item.quality - quality_delta # double quality amount degraded
       end
     end
   end
